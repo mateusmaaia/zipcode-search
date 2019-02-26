@@ -7,7 +7,7 @@ services:
       - .env
     build: ./
     ports:
-      - 9000:9000
+      - 8080:8080
     volumes:
       - ./:/go/src/zipcode-search
     command: ["revel", "run", "-a", "zipcode-search"]
