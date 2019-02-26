@@ -10,4 +10,4 @@ services:
       - 9000:9000
     volumes:
       - ./:/go/src/zipcode-search
-    command: ["revel", "run", "-a", "zipcode-search"
+    command: ["revel", "run", "-a", "zipcode-search"]
