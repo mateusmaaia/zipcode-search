@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  zipcode-search:
+    container_name: zipcode-search
+    env_file:
+      - .env
+    build: ./
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/go/src/zipcode-search
+    command: ["revel", "run", "-a", "zipcode-search"

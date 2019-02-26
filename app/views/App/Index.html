@@ -1,0 +1,98 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+  <div id="app">
+    <v-app>
+      <v-content >
+        <template>
+          <div class="col-md-12">
+            <div class="col-md-3"></div>
+            <div class ="col-md-6">
+              <v-form ref="form">
+                <v-text-field v-model="cep" :rules="cepRules" :counter="8" label="cep" required></v-text-field>
+                <div class="text-right m-top">
+                  <v-btn large color="success"     
+                    @click="submit"
+                  >buscar</v-btn>
+                </div>
+              </v-form><br>
+              <h1 v-show="error">{{"{{"}}error{{"}}"}}</h1>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+        </template>
+        <template>
+          <div class="col-md-3"></div>
+          <div class="col-md-6" >
+            <ul style="list-style-type: none;">
+              <li>
+                <b>{{"{{"}}labels.street{{"}}"}}</b> {{"{{"}}data.street{{"}}"}}
+              </li>
+              <li>
+                <b>{{"{{"}}labels.neighborhood{{"}}"}}</b> {{"{{"}}data.neighborhood{{"}}"}}
+              </li>
+              <li>
+                <b>{{"{{"}}labels.city{{"}}"}}</b> {{"{{"}}data.city{{"}}"}}
+              </li>
+              <li>
+                <b>{{"{{"}}labels.state_short{{"}}"}}</b> {{"{{"}}data.state_short{{"}}"}}
+              </li>
+              <li>
+              <b>{{"{{"}}labels.zipcode{{"}}"}}</b> {{"{{"}}data.zipcode{{"}}"}}
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-3"></div>
+        </template>
+    </v-app>
+  </div>
+neighborhood
+  <script>
+    new Vue({ 
+     el: '#app',
+     data(){
+       return {
+         cepRules: [
+           v => !!v || "Preencha o CEP",
+           v => /[0-9]{8}/.test(v) || "Apenas números são permitidos",
+         ],
+         cep: null,
+         valid: null,
+         error: null,
+         labels: {
+          zipcode: null,
+          street: null,
+          neighborhood: null,
+          state_short: null,
+          city: null,
+        },
+         data: {
+          name: null,
+          zipcode: null,
+          street: null,
+          neighborhood: null,
+          state_short: null,
+          city: null,
+         }
+       }
+     },
+     methods: {
+        submit() {
+         if (this.$refs.form.validate()) {
+           this.$http.get('/zipcode/' + this.cep).then(response => {
+             this.data = response.body,
+             this.labels.zipcode = "• CEP: "
+             this.labels.street = "• Endereço: ",
+             this.labels.neighborhood = "• Bairro: ",
+             this.labels.state_short = "• Estado: ",
+             this.labels.city = "• Cidade: "
+           }, response => {
+             this.error = response.body.message
+           });
+         }
+        }
+      }
+    })
+  </script>
+
+{{template "footer.html" .}}
